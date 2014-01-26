@@ -49,27 +49,26 @@ public class ControllerServlet extends HttpServlet {
 		try {
 			modelBean = (ModelBean)Class.forName(modelPackage + name + "Bean").newInstance();
 		
-		} catch (InstantiationException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
+		} catch (Exception e) {} // log逵∫払
 		
 		if (modelBean == null) {
-			// Todoエラー処理
+			forward("error.jsp", request, response);
 		} else {
 			modelBean.init(request, response);
 			modelBean.validate();
 			modelBean.process();
-			RequestDispatcher rd = request.getRequestDispatcher(jspDir + name + ".jsp");
 			request.setAttribute("bean", modelBean);
-			rd.forward(request, response);
+			if (modelBean.isSystemError()) {
+				forward("error.jsp", request, response);
+			} else {
+				forward(name + ".jsp", request, response);
+			}
 		}
+	}
+	
+	private void forward(String jsp, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher rd = request.getRequestDispatcher(jspDir + jsp);
+		rd.forward(request, response);
 	}
 }
 

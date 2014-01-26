@@ -116,6 +116,8 @@ table td {
 	</table>
 	<input type="submit" name="edit" value="<c:out value="${bean.viewTitle}" />" />
 </fieldset>
+<br />
+<a href="welcome?model=CustomerSearch">戻る</a>
 
 </form>
 </body>

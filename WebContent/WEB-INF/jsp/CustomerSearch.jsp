@@ -90,6 +90,8 @@ table td {
 	<input type="submit" name="search" value="検索" />
 </fieldset>
 <br />
+<a href="welcome?model=CustomerEdit">新規登録</a>
+<br />
 <br />
 
 <table border="1" class="list-table">

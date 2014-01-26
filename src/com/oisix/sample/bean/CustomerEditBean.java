@@ -3,9 +3,7 @@ package com.oisix.sample.bean;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
@@ -24,64 +22,6 @@ import com.oisix.sample.validator.ZipCodeValidator;
 public class CustomerEditBean extends ModelBeanBase {
 
 	private MstCustomer mstCustomer = new MstCustomer();
-
-	@Override
-	public void process() {
-		this.mstCustomer.setCustomerId(getParameterNvl("customerId"));
-
-		if (isClick("edit")) {
-			this.edit();
-		}
-		else if (!StringUtils.isEmpty(this.mstCustomer.getCustomerId())) {
-			search();
-			request.setAttribute("mstCustomer", this.mstCustomer);
-		}
-
-
-	}
-
-	public void search() {
-		Configuration configuration = new Configuration();
-		configuration.configure();
-		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-		SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-
-		Session session = sessionFactory.openSession();
-
-		Transaction transaction = session.beginTransaction();
-
-		this.mstCustomer = MstCustomerDao.findByPk(session, mstCustomer.getCustomerId());
-		this.mstCustomer.divideZipCode();
-		this.mstCustomer.divideTel();
-
-		transaction.commit();
-
-		session.close();
-
-	}
-
-	public void edit() {
-		if (super.isError()) {
-			return;
-		}
-
-		Configuration configuration = new Configuration();
-		configuration.configure();
-		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-		SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-
-		Session session = sessionFactory.openSession();
-
-		Transaction transaction = session.beginTransaction();
-
-		MstCustomerDao.merge(session, mstCustomer);
-
-		transaction.commit();
-
-		session.close();
-
-		super.setActionMessage(getViewTitle() + "完了しました。");
-	}
 
 	@Override
 	public void validate() {
@@ -103,8 +43,68 @@ public class CustomerEditBean extends ModelBeanBase {
 			this.mstCustomer.joinZipCode();
 			this.mstCustomer.joinTel();
 		}
-
 		super.setErrors(errors);
+	}
+	
+	@Override
+	public void process() {
+		this.mstCustomer.setCustomerId(getParameterNvl("customerId"));
+
+		if (isClick("edit")) {
+			this.edit();
+		}
+		else if (!StringUtils.isEmpty(this.mstCustomer.getCustomerId())) {
+			search();
+			request.setAttribute("mstCustomer", this.mstCustomer);
+		}
+	}
+
+	public void search() {
+		Configuration configuration = new Configuration();
+		configuration.configure();
+		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+		SessionFactory factory = configuration.buildSessionFactory(serviceRegistry);
+
+		try {
+			factory.getCurrentSession().beginTransaction();
+			
+			this.mstCustomer = MstCustomerDao.findByPk(
+				factory.getCurrentSession(), mstCustomer.getCustomerId()
+			);
+			this.mstCustomer.divideZipCode();
+			this.mstCustomer.divideTel();
+			
+			factory.getCurrentSession().getTransaction().commit();
+			
+		} catch (RuntimeException e) {
+			factory.getCurrentSession().getTransaction().rollback();
+		} finally {
+			factory.getCurrentSession().close();
+		}
+	}
+
+	public void edit() {
+		if (super.isError()) {return;}
+
+		Configuration configuration = new Configuration();
+		configuration.configure();
+		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+		SessionFactory factory = configuration.buildSessionFactory(serviceRegistry);
+
+		try {
+			factory.getCurrentSession().beginTransaction();
+		
+			MstCustomerDao.merge(factory.getCurrentSession(), mstCustomer);
+
+			factory.getCurrentSession().getTransaction().commit();
+			super.setActionMessage(getViewTitle() + "完了しました。");
+			
+		} catch (RuntimeException e) {
+			factory.getCurrentSession().getTransaction().rollback();
+			super.setActionMessage(getViewTitle() + "に失敗しました。");
+		} finally {
+			factory.getCurrentSession().close();
+		}	
 	}
 
 	public MstCustomer getMstCustomer() {

@@ -14,6 +14,7 @@ public interface ModelBean {
 
 	public void validate() throws IOException, ServletException;
 	
+	public boolean isSystemError();
 }
 
 

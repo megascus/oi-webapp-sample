@@ -15,6 +15,7 @@ public abstract class ModelBeanBase implements ModelBean {
 	protected HttpServletResponse response;
 	protected List<String> errors = new ArrayList<String>();
 	protected String actionMessage = new String();
+	protected String systemErrorMessage;
 	
 	public void init(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
@@ -23,9 +24,8 @@ public abstract class ModelBeanBase implements ModelBean {
 	
 	public abstract void process();
 
-	
-	
 	private static final String EMPTY = "";
+	
 	public String getParameterNvl(String key) {
 		String s = this.request.getParameter(key);
 		if (s == null) {
@@ -58,6 +58,12 @@ public abstract class ModelBeanBase implements ModelBean {
 	public void setActionMessage(String actionMessage) {
 		this.actionMessage = actionMessage;
 	}
+	
+	public void gotoSystemErrorPage(String systemErrorMessage) {
+		this.systemErrorMessage = systemErrorMessage;
+	}
+	
+	public boolean isSystemError() {
+		return (this.systemErrorMessage != null);
+	}
 }
-
-

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
@@ -14,22 +13,19 @@ import org.hibernate.service.ServiceRegistryBuilder;
 import com.oisix.sample.dao.MstCustomerDao;
 import com.oisix.sample.model.MstCustomer;
 
+/**
+ * 顧客の検索をするクラスです。
+ * 
+ * @author yamada-shouhei
+ *
+ */
 public class CustomerSearchBean extends ModelBeanBase {
 
 	private MstCustomer searchCondition = new MstCustomer();
 	private List<MstCustomer> result = null;
 
 	@Override
-	public void validate() throws IOException, ServletException {
-
-		this.searchCondition.setCustomerId(getParameterNvl("customerId"));
-		this.searchCondition.setFullname(getParameterNvl("fullname"));
-		this.searchCondition.setFullnameKana(getParameterNvl("fullnameKana"));
-		this.searchCondition.setMailAddress(getParameterNvl("mailAddress"));
-		this.searchCondition.setZipCode(getParameterNvl("zipCode1") + getParameterNvl("zipCode2"));
-		//this.searchCondition.setTel(getParameterNvl("tel1"), getParameterNvl("tel2"), getParameterNvl("tel3"));
-
-	}
+	public void validate() throws IOException, ServletException {}
 
 	@Override
 	public void process() {
@@ -38,22 +34,34 @@ public class CustomerSearchBean extends ModelBeanBase {
 		}
 	}
 
+	/**
+	 * 顧客を検索します。
+	 */
 	public void search() {
 		getParameter();
 
 		Configuration configuration = new Configuration();
 		configuration.configure();
 		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-		SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+		SessionFactory factory = configuration.buildSessionFactory(serviceRegistry);
 		
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-
-		this.result = MstCustomerDao.find(session, this.searchCondition);
-
-		session.close();
+		try {
+			factory.getCurrentSession().beginTransaction();
+			
+			this.result = MstCustomerDao.find(factory.getCurrentSession(), this.searchCondition);
+			
+			factory.getCurrentSession().getTransaction().commit();
+			
+		} catch (RuntimeException e) {
+			factory.getCurrentSession().getTransaction().rollback();
+		} finally {
+			factory.getCurrentSession().close();
+		}
 	}
 
+	/**
+	 * リクエストパラメータを取得します。
+	 */
 	private void getParameter() {
 		this.searchCondition.setCustomerId(getParameterNvl("customerId"));
 		this.searchCondition.setFullname(getParameterNvl("fullname"));
