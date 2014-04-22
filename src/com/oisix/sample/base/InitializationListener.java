@@ -4,7 +4,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import com.oisix.sample.test.MstCustomerData;
+import javax.servlet.annotation.WebListener;
 
+@WebListener
 public class InitializationListener implements ServletContextListener{
 
 	public void contextInitialized(ServletContextEvent event){
