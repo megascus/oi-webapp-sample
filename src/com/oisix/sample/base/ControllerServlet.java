@@ -46,8 +46,6 @@ public class ControllerServlet extends HttpServlet {
     private final String jspDir = "WEB-INF/jsp/";
 
     protected void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
 
         String name = request.getParameter("model");
 
