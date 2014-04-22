@@ -7,17 +7,16 @@ import com.oisix.sample.test.MstCustomerData;
 import javax.servlet.annotation.WebListener;
 
 @WebListener
-public class InitializationListener implements ServletContextListener{
+public class InitializationListener implements ServletContextListener {
 
-	public void contextInitialized(ServletContextEvent event){
-		
-		new MstCustomerData().create();
-		
-	}
+    @Override
+    public void contextInitialized(ServletContextEvent event) {
 
-	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
-	}
+        new MstCustomerData().create();
+
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent arg0) {
+    }
 }
-
-
