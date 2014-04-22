@@ -18,28 +18,18 @@ import javax.servlet.annotation.WebServlet;
     @WebInitParam(name = "defaultModelName", value = "StaticBean")})
 public class ControllerServlet extends HttpServlet {
 
+    @Override
     public void doGet(HttpServletRequest request,
             HttpServletResponse response)
             throws IOException, ServletException {
-        try {
-            process(request, response);
-        } catch (ServletException e) {
-            throw e;
-        } catch (IOException e) {
-            throw e;
-        }
+        process(request, response);
     }
 
+    @Override
     public void doPost(HttpServletRequest request,
             HttpServletResponse response)
             throws IOException, ServletException {
-        try {
-            process(request, response);
-        } catch (ServletException e) {
-            throw e;
-        } catch (IOException e) {
-            throw e;
-        }
+        process(request, response);
     }
 
     private final String modelPackage = "com.oisix.sample.bean.";
