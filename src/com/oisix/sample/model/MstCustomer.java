@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 @Entity
 public class MstCustomer implements java.io.Serializable {
 
+        @Id
 	private String customerId;
 	private String mailAddress;
 	private String fullname;
@@ -60,7 +62,6 @@ public class MstCustomer implements java.io.Serializable {
 		this.updateId = updateId;
 	}
 
-	@Id
 	public String getCustomerId() {
 		return this.customerId;
 	}
@@ -109,12 +110,10 @@ public class MstCustomer implements java.io.Serializable {
 		this.zipCode2 = zipCode2;
 	}
 
-	@Transient
 	public String getZipCode1() {
 		return this.zipCode1;
 	}
 
-	@Transient
 	public String getZipCode2() {
 		return this.zipCode2;
 	}
@@ -147,17 +146,14 @@ public class MstCustomer implements java.io.Serializable {
 		return this.tel;
 	}
 
-	@Transient
 	public String getTel1() {
 		return this.tel1;
 	}
 
-	@Transient
 	public String getTel2() {
 		return this.tel2;
 	}
 
-	@Transient
 	public String getTel3() {
 		return this.tel3;
 	}
@@ -166,17 +162,14 @@ public class MstCustomer implements java.io.Serializable {
 		this.tel = tel;
 	}
 
-	@Transient
 	public void setTel1(String tel1) {
 		this.tel1 = tel1;
 	}
 
-	@Transient
 	public void setTel2(String tel2) {
 		this.tel2 = tel2;
 	}
 
-	@Transient
 	public void setTel3(String tel3) {
 		this.tel3 = tel3;
 	}
@@ -213,7 +206,6 @@ public class MstCustomer implements java.io.Serializable {
 		this.updateId = updateId;
 	}
 
-	@Transient
 	public void divideZipCode() {
 		String[] zipCode = {"", ""};
 		if (!StringUtils.isEmpty(this.zipCode)) {
@@ -224,7 +216,6 @@ public class MstCustomer implements java.io.Serializable {
 		this.zipCode2 = zipCode[1];
 	}
 
-	@Transient
 	public void divideTel() {
 		String[] tel = {"", "", ""};
 		if (!StringUtils.isEmpty(this.tel)) {
@@ -235,12 +226,18 @@ public class MstCustomer implements java.io.Serializable {
 		tel2 = tel[1];
 		tel3 = tel[2];
 	}
+        
+        @PrePersist
+        public void prePersist() {
+            joinZipCode();
+            joinTel();
+        }
 
-	public void joinZipCode() {
+	private void joinZipCode() {
 		this.zipCode = this.zipCode1 + "-" + this.zipCode2;
 	}
 
-	public void joinTel() {
+	private void joinTel() {
 		this.tel = this.tel1 + "-" + this.tel2 + "-" + this.tel3;
 	}
 }

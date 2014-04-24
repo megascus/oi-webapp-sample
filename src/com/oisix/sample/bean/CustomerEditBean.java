@@ -39,10 +39,6 @@ public class CustomerEditBean extends ModelBeanBase {
 			new Address2Validator(errors).validate(this.mstCustomer.getAddress2());
 			new TelValidator(errors).validate(this.mstCustomer.getTel1(), this.mstCustomer.getTel2(), this.mstCustomer.getTel3());
 		}
-		if (errors.size() == 0) {
-			this.mstCustomer.joinZipCode();
-			this.mstCustomer.joinTel();
-		}
 		super.setErrors(errors);
 	}
 	
