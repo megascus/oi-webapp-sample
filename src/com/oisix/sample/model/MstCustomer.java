@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
@@ -228,6 +229,7 @@ public class MstCustomer implements java.io.Serializable {
 	}
         
         @PrePersist
+        @PreUpdate
         public void prePersist() {
             joinZipCode();
             joinTel();
