@@ -67,8 +67,6 @@ public class CustomerEditBean extends ModelBeanBase {
 			this.mstCustomer = MstCustomerDao.findByPk(
 				factory.getCurrentSession(), mstCustomer.getCustomerId()
 			);
-			this.mstCustomer.divideZipCode();
-			this.mstCustomer.divideTel();
 			
 			factory.getCurrentSession().getTransaction().commit();
 			

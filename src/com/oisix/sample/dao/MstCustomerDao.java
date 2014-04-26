@@ -50,23 +50,24 @@ public class MstCustomerDao {
 		.append("from ").append(TABLE_NAME).append(" ")
 		.append("where ");
 
-		addSearchCodition(buff, "customerId", searchCondition.getCustomerId());
-		addSearchCoditionLike(buff, "fullname", searchCondition.getFullname());
-		addSearchCoditionLike(buff, "fullnameKana", searchCondition.getFullnameKana());
-		addSearchCodition(buff, "mailAddress", searchCondition.getMailAddress());
-		addSearchCodition(buff, "zipCode", searchCondition.getZipCode());
-		addSearchCodition(buff, "tel", searchCondition.getTel());
+                //TODO 検索条件を元に戻す
+		//addSearchCodition(buff, "customerId", searchCondition.getCustomerId());
+		//addSearchCoditionLike(buff, "fullname", searchCondition.getFullname());
+		//addSearchCoditionLike(buff, "fullnameKana", searchCondition.getFullnameKana());
+		//addSearchCodition(buff, "mailAddress", searchCondition.getMailAddress());
+		//addSearchCodition(buff, "zipCode", searchCondition.getZipCode());
+		//addSearchCodition(buff, "tel", searchCondition.getTel());
 		buff.append("1 = 1 ");
 		buff.append("order by customerId");
 
 		Query query = session.createQuery(buff.toString());
 
-		setParameter(query, "customerId", searchCondition.getCustomerId());
-		setParameterLike(query, "fullname", searchCondition.getFullname());
-		setParameterLike(query, "fullnameKana", searchCondition.getFullnameKana());
-		setParameter(query, "mailAddress", searchCondition.getMailAddress());
-		setParameter(query, "zipCode", searchCondition.getZipCode());
-		setParameter(query, "tel", searchCondition.getTel());
+		//setParameter(query, "customerId", searchCondition.getCustomerId());
+		//setParameterLike(query, "fullname", searchCondition.getFullname());
+		//setParameterLike(query, "fullnameKana", searchCondition.getFullnameKana());
+		//setParameter(query, "mailAddress", searchCondition.getMailAddress());
+		//setParameter(query, "zipCode", searchCondition.getZipCode());
+		//setParameter(query, "tel", searchCondition.getTel());
 
 		return query.list();
 	}
