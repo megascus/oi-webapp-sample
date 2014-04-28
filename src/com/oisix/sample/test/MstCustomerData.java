@@ -1,6 +1,7 @@
 package com.oisix.sample.test;
 
 import com.oisix.sample.dao.MstCustomerDao;
+import com.oisix.sample.model.Address;
 import com.oisix.sample.model.MstCustomer;
 import com.oisix.sample.model.TelephoneNumber;
 import com.oisix.sample.model.ZipCode;

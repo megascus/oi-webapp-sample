@@ -21,7 +21,7 @@ public class Address implements Serializable {
     private String city;
     private String prefecture;
     @Embedded
-    private ZipCode zipCode;
+    private ZipCode zipCode = new ZipCode();
 
     public String getStreet() {
         return street;

@@ -52,6 +52,7 @@ public class CustomerSearchBean extends ModelBeanBase {
             factory.getCurrentSession().getTransaction().commit();
 
         } catch (RuntimeException e) {
+            e.printStackTrace();
             factory.getCurrentSession().getTransaction().rollback();
         } finally {
             factory.getCurrentSession().close();
