@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.oisix.sample.bean.ModelBean;
+import com.oisix.sample.util.EJBFactory;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
@@ -41,7 +42,9 @@ public class ControllerServlet extends HttpServlet {
 
         ModelBean modelBean = null;
         try {
-            modelBean = (ModelBean) Class.forName(modelPackage + name + "Bean").newInstance();
+            @SuppressWarnings("unchecked")
+            Class<ModelBean> clazz = (Class<ModelBean>) Class.forName(modelPackage + name + "Bean");
+            modelBean = EJBFactory.getRepository(clazz);
 
         } catch (Exception e) {
             log(e.getMessage());

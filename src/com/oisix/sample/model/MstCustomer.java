@@ -106,7 +106,7 @@ public class MstCustomer extends EntityBase {
     }
 
     public void setAddress2(String address2) {
-        this.address.setCity(address2);
+        this.address.setStreet(address2);
     }
 
     public String getTel() {

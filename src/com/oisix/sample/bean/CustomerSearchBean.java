@@ -1,15 +1,13 @@
 package com.oisix.sample.bean;
 
-import com.oisix.sample.dao.MstCustomerDao;
+import com.oisix.sample.dao.MstCustomerRepository;
 import com.oisix.sample.model.MstCustomer;
 import com.oisix.sample.model.ZipCode;
 import java.io.IOException;
 import java.util.List;
+import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 
 /**
  * 顧客の検索をするクラスです。
@@ -17,7 +15,11 @@ import org.hibernate.service.ServiceRegistryBuilder;
  * @author yamada-shouhei
  *
  */
+@Stateful
 public class CustomerSearchBean extends ModelBeanBase {
+
+    @Inject
+    private MstCustomerRepository mstCustomerRepository;
 
     private MstCustomer searchCondition = new MstCustomer();
     private List<MstCustomer> result = null;
@@ -38,25 +40,8 @@ public class CustomerSearchBean extends ModelBeanBase {
      */
     public void search() {
         getParameter();
+        this.result = mstCustomerRepository.findByCondition(this.searchCondition);
 
-        Configuration configuration = new Configuration();
-        configuration.configure();
-        ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-        SessionFactory factory = configuration.buildSessionFactory(serviceRegistry);
-
-        try {
-            factory.getCurrentSession().beginTransaction();
-
-            this.result = MstCustomerDao.find(factory.getCurrentSession(), this.searchCondition);
-
-            factory.getCurrentSession().getTransaction().commit();
-
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            factory.getCurrentSession().getTransaction().rollback();
-        } finally {
-            factory.getCurrentSession().close();
-        }
     }
 
     /**
