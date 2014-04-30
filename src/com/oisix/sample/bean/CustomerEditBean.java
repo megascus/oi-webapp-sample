@@ -14,6 +14,7 @@ import com.oisix.sample.validator.MailAddressValidator;
 import com.oisix.sample.validator.TelValidator;
 import com.oisix.sample.validator.TodofukenValidator;
 import com.oisix.sample.validator.ZipCodeValidator;
+import java.util.Optional;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 
@@ -65,6 +66,16 @@ public class CustomerEditBean extends ModelBeanBase {
             return;
         }
         try {
+            Optional<MstCustomer> entity = mstCustomerRepository.findByCustomerId(mstCustomer.getCustomerId());
+            if (entity.isPresent()) {
+                MstCustomer existence = entity.get();
+                existence.setFullname(mstCustomer.getFullname());
+                existence.setFullnameKana(mstCustomer.getFullnameKana());
+                existence.setMailAddress(mstCustomer.getMailAddress());
+                existence.setAddress(mstCustomer.getAddress());
+                existence.setTel(mstCustomer.getTel());
+                mstCustomer = existence;
+            }
             mstCustomerRepository.merge(mstCustomer);
             super.setActionMessage(getViewTitle() + "完了しました。");
 

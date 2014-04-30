@@ -109,8 +109,8 @@ public class MstCustomer extends EntityBase {
         this.address.setStreet(address2);
     }
 
-    public String getTel() {
-        return this.tel.toString();
+    public TelephoneNumber getTel() {
+        return this.tel;
     }
 
     public String getTel1() {
