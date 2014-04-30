@@ -16,7 +16,7 @@ import javax.naming.NamingException;
 public final class EJBFactory {
 
     @SuppressWarnings("unchecked")
-    public static <T> T getRepository(Class<T> clazz) {
+    public static <T> T getEJB(Class<T> clazz) {
         Context ctx;
         try {
             ctx = new InitialContext();
