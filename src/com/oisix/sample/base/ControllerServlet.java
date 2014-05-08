@@ -44,7 +44,7 @@ public class ControllerServlet extends HttpServlet {
         try {
             @SuppressWarnings("unchecked")
             Class<ModelBean> clazz = (Class<ModelBean>) Class.forName(modelPackage + name + "Bean");
-            modelBean = EJBFactory.getRepository(clazz);
+            modelBean = EJBFactory.getEJB(clazz);
 
         } catch (Exception e) {
             log(e.getMessage());
