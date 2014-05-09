@@ -34,6 +34,7 @@ public class MstCustomerRepository extends AbstractRepository<MstCustomer> {
     }
     
     public Optional<MstCustomer> findByCustomerId(String customerId) {
+        @SuppressWarnings("unchecked")
         List<MstCustomer> c = (List<MstCustomer>) em.createQuery("select c from MstCustomer c where c.customerId = :customerId").setParameter("customerId", customerId).getResultList();
         if (c.isEmpty()) {
             return Optional.empty();
