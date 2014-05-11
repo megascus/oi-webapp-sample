@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.oisix.sample.base;
 
 import java.io.IOException;
@@ -11,10 +6,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
 
 /**
- *
+ * なんちゃってフレームワークです。
+ * サーブレットを起動した後にcatchしていない例外が投げられなければServlet名と同名のjspへforwardします。
+ * エラーが有った場合はerror.jspを表示しようとしますが、error.jspは未実装です。
  * @author s.kubo
  */
 @SuppressWarnings("serial")
@@ -59,7 +55,7 @@ public abstract class BaseServlet extends HttpServlet {
     }
 
     /**
-     * 実際の処理を記述します。 戻り値として表示するjspファイル名を返して下さい。
+     * 実際の処理を記述します。 
      *
      * @param request
      * @param response
@@ -69,7 +65,7 @@ public abstract class BaseServlet extends HttpServlet {
     protected abstract void get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
     /**
-     * 実際の処理を記述します。 戻り値として表示するjspファイル名を返して下さい。
+     * 実際の処理を記述します。 
      *
      * @param request
      * @param response

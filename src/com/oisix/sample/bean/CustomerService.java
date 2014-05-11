@@ -7,8 +7,14 @@ import com.oisix.sample.dao.MstCustomerRepository;
 import com.oisix.sample.model.MstCustomer;
 import java.util.Optional;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+/**
+ * トランザクション管理を行います。
+ * @author megascus
+ */
 @Stateless
 public class CustomerService {
 
@@ -29,6 +35,11 @@ public class CustomerService {
         }
     }
 
+    /*
+     * TransactionAttributeについての説明はこちら
+     * http://otndnld.oracle.co.jp/document/products/wlw/docs103/guide/controls/conControlTransactions.html
+     */
+    @TransactionAttribute(TransactionAttributeType.NEVER)
     public List<MstCustomer> search(MstCustomer searchCondition) {
         return mstCustomerRepository.findByCondition(searchCondition);
     }
