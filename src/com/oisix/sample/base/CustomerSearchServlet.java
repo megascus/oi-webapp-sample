@@ -14,23 +14,35 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import static com.oisix.sample.base.MstCustomerUtils.*;
 
 /**
  *
  * @author s.kubo
  */
-@WebServlet(name = "CustomerSearch", urlPatterns = {"/CustomerSearch"})
+@WebServlet(name = "CustomerSearch", urlPatterns = {"/Customer/Search"})
 public class CustomerSearchServlet extends BaseServlet {
 
     @Inject
     CustomerService service;
 
     @Override
-    protected void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected String get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        CustomerSearchBean bean = new CustomerSearchBean();
+        request.setAttribute("bean", bean);
+        return null;
+
+    }
+
+    @Override
+    protected String post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         MstCustomer mstCustomer = convertParameter(request);
         List<MstCustomer> searchResults = service.search(mstCustomer);
-        request.setAttribute("results", searchResults);
-        forward("CustomerSearch.jsp", request, response);
+        CustomerSearchBean bean = new CustomerSearchBean();
+        bean.setSearchCondition(mstCustomer);
+        bean.setResults(searchResults);
+        request.setAttribute("bean", bean);
+        return null;
     }
 
 }

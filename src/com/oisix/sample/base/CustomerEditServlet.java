@@ -23,40 +23,47 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import static com.oisix.sample.base.MstCustomerUtils.*;
+import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author s.kubo
  */
-@WebServlet(name = "CustomerEdit", urlPatterns = {"/CustomerEdit"})
+@WebServlet(name = "CustomerEdit", urlPatterns = {"/Customer/Edit"})
 public class CustomerEditServlet extends BaseServlet {
 
     @Inject
     CustomerService service;
 
     @Override
-    protected void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected String get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+        MstCustomer mstCustomer = convertParameter(request);
+        CustomerEditBean bean = new CustomerEditBean();
+        if (StringUtils.isNotEmpty(mstCustomer.getCustomerId())) {
+            Optional<MstCustomer> find = service.find(mstCustomer.getCustomerId());
+            if (find.isPresent()) {
+                bean.setMstCustomer(find.get());
+            }
+        }
+        request.setAttribute("bean", bean);
+        return null;
+    }
+
+    @Override
+    protected String post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         MstCustomer mstCustomer = convertParameter(request);
         List<String> errors = validate(mstCustomer);
         if (!errors.isEmpty()) {
             service.edit(mstCustomer);
         }
-        request.setAttribute("bean", mstCustomer);
-        forward("CustomerEdit.jsp", request, response);
-    }
-
-    private List<String> validate(MstCustomer mstCustomer) {
-        List<String> errors = new ArrayList<String>();
-
-        new FullnameValidator(errors).validate(mstCustomer.getFullname());
-        new FullnameKanaValidator(errors).validate(mstCustomer.getFullnameKana());
-        new MailAddressValidator(errors).validate(mstCustomer.getMailAddress());
-        new ZipCodeValidator(errors).validate(mstCustomer.getZipCode1() + "-" + mstCustomer.getZipCode2());
-        new TodofukenValidator(errors).validate(mstCustomer.getTodofuken());
-        new Address1Validator(errors).validate(mstCustomer.getAddress1());
-        new Address2Validator(errors).validate(mstCustomer.getAddress2());
-        new TelValidator(errors).validate(mstCustomer.getTel1(), mstCustomer.getTel2(), mstCustomer.getTel3());
-        return errors;
+        CustomerEditBean bean = new CustomerEditBean();
+        bean.setMstCustomer(mstCustomer);
+        bean.setErrors(errors);
+        request.setAttribute("bean", bean);
+        return null;
     }
 }

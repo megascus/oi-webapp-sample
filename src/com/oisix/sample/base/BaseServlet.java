@@ -5,7 +5,6 @@
  */
 package com.oisix.sample.base;
 
-import com.oisix.sample.model.MstCustomer;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,45 +24,60 @@ public abstract class BaseServlet extends HttpServlet {
     public void doGet(HttpServletRequest request,
             HttpServletResponse response)
             throws IOException, ServletException {
-        process(request, response);
+        try {
+            String forward = get(request, response);
+            forward(forward, request, response);
+        } catch (Exception e) {
+            log("uncatched exception", e);
+            e.printStackTrace();
+            forward("error.jsp", request, response);
+        }
     }
 
     @Override
     public void doPost(HttpServletRequest request,
             HttpServletResponse response)
             throws IOException, ServletException {
-        process(request, response);
+        try {
+            String forward = post(request, response);
+            forward(forward, request, response);
+        } catch (Exception e) {
+            log("uncatched exception", e);
+            e.printStackTrace();
+            forward("error.jsp", request, response);
+        }
     }
 
-    private final String jspDir = "WEB-INF/jsp/";
+    private final String jspDir = "/WEB-INF/jsp/";
 
     protected void forward(String jsp, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(StringUtils.isEmpty(jsp)) {
+            jsp = getServletName() + ".jsp";
+        }
         RequestDispatcher rd = request.getRequestDispatcher(jspDir + jsp);
         rd.forward(request, response);
     }
 
-    protected abstract void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+    /**
+     * 実際の処理を記述します。 戻り値として表示するjspファイル名を返して下さい。
+     *
+     * @param request
+     * @param response
+     * @return 表示するjspファイル名
+     * @throws IOException
+     * @throws ServletException
+     */
+    protected abstract String get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
-    public String getParameterNvl(HttpServletRequest req, String key) {
-        String s = req.getParameter(key);
-        return StringUtils.trimToEmpty(s);
-    }
-
-    protected MstCustomer convertParameter(HttpServletRequest req) {
-        MstCustomer mstCustomer = new MstCustomer();
-        mstCustomer.setCustomerId(getParameterNvl(req, "customerId"));
-        mstCustomer.setFullname(getParameterNvl(req, "fullname"));
-        mstCustomer.setFullnameKana(getParameterNvl(req, "fullnameKana"));
-        mstCustomer.setMailAddress(getParameterNvl(req, "mailAddress"));
-        mstCustomer.setZipCode1(getParameterNvl(req, "zipCode1"));
-        mstCustomer.setZipCode2(getParameterNvl(req, "zipCode2"));
-        mstCustomer.setTodofuken(getParameterNvl(req, "todofuken"));
-        mstCustomer.setAddress1(getParameterNvl(req, "address1"));
-        mstCustomer.setAddress2(getParameterNvl(req, "address2"));
-        mstCustomer.setTel1(getParameterNvl(req, "tel1"));
-        mstCustomer.setTel2(getParameterNvl(req, "tel2"));
-        mstCustomer.setTel3(getParameterNvl(req, "tel3"));
-        return mstCustomer;
-    }
+    /**
+     * 実際の処理を記述します。 戻り値として表示するjspファイル名を返して下さい。
+     *
+     * @param request
+     * @param response
+     * @return 表示するjspファイル名
+     * @throws IOException
+     * @throws ServletException
+     */
+    protected abstract String post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
 }

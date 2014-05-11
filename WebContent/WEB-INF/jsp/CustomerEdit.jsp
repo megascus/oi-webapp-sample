@@ -40,7 +40,7 @@ table td {
 #header {
 	height: 95px;
 	height: 60px;
-	background-image: url('images/logo.png');
+	background-image: url('../images/logo.png');
 	background-position: bottom left;
 	background-repeat: no-repeat;
 }
@@ -65,16 +65,16 @@ table td {
 
 <br />
 
-<form name="form" method="post" action="welcome?model=CustomerEdit">
+<form name="form" method="post" action="Edit">
 <input type="hidden" name="customerId" value="<c:out value="${bean.mstCustomer.customerId}" />" />
 
 <fieldset style="width: 600px">
-	<legend><c:out value="${viewTitle}" />内容</legend>
+	<legend><c:out value="${bean.viewTitle}" />内容</legend>
 	<table style="border: 0px">
 		<tr>
 			<td>顧客ID：</td>
 			<td>
-				<c:out value="${bean.mstCustomer.customerId}" />
+				<input type="hidden" name="id" value="${bean.mstCustomer.id}"><c:out value="${bean.mstCustomer.customerId}" />
 			</td>
 		</tr>
 		<tr>
@@ -117,7 +117,7 @@ table td {
 	<input type="submit" name="edit" value="<c:out value="${bean.viewTitle}" />" />
 </fieldset>
 <br />
-<a href="welcome?model=CustomerSearch">戻る</a>
+<a href="Search">戻る</a>
 
 </form>
 </body>
