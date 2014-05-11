@@ -25,11 +25,10 @@ public abstract class BaseServlet extends HttpServlet {
             HttpServletResponse response)
             throws IOException, ServletException {
         try {
-            String forward = get(request, response);
-            forward(forward, request, response);
+            get(request, response);
+            forward(request, response);
         } catch (Exception e) {
             log("uncatched exception", e);
-            e.printStackTrace();
             forward("error.jsp", request, response);
         }
     }
@@ -39,11 +38,10 @@ public abstract class BaseServlet extends HttpServlet {
             HttpServletResponse response)
             throws IOException, ServletException {
         try {
-            String forward = post(request, response);
-            forward(forward, request, response);
+            post(request, response);
+            forward(request, response);
         } catch (Exception e) {
             log("uncatched exception", e);
-            e.printStackTrace();
             forward("error.jsp", request, response);
         }
     }
@@ -51,11 +49,13 @@ public abstract class BaseServlet extends HttpServlet {
     private final String jspDir = "/WEB-INF/jsp/";
 
     protected void forward(String jsp, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(StringUtils.isEmpty(jsp)) {
-            jsp = getServletName() + ".jsp";
-        }
         RequestDispatcher rd = request.getRequestDispatcher(jspDir + jsp);
         rd.forward(request, response);
+    }
+
+    protected void forward(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String jsp = getServletName() + ".jsp";
+        forward(jsp, request, response);
     }
 
     /**
@@ -63,21 +63,19 @@ public abstract class BaseServlet extends HttpServlet {
      *
      * @param request
      * @param response
-     * @return 表示するjspファイル名
      * @throws IOException
      * @throws ServletException
      */
-    protected abstract String get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+    protected abstract void get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
     /**
      * 実際の処理を記述します。 戻り値として表示するjspファイル名を返して下さい。
      *
      * @param request
      * @param response
-     * @return 表示するjspファイル名
      * @throws IOException
      * @throws ServletException
      */
-    protected abstract String post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+    protected abstract void post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
 }

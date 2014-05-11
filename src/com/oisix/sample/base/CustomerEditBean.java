@@ -17,6 +17,7 @@ public class CustomerEditBean {
     private String actionMessage;
     private MstCustomer mstCustomer = new MstCustomer();
     private List<String> errors;
+    private boolean change = false;
 
     public String getActionMessage() {
         return actionMessage;
@@ -35,7 +36,7 @@ public class CustomerEditBean {
     }
 
     public String getViewTitle() {
-        return mstCustomer == null || mstCustomer.getId() == null ? "登録" : "編集";
+        return change ? "編集" : "登録";
     }
 
     public List<String> getErrors() {
@@ -44,5 +45,13 @@ public class CustomerEditBean {
 
     public void setErrors(List<String> errors) {
         this.errors = errors;
+    }
+
+    public boolean isChange() {
+        return change;
+    }
+
+    public void setChange(boolean change) {
+        this.change = change;
     }
 }

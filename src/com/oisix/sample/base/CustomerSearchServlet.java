@@ -27,22 +27,19 @@ public class CustomerSearchServlet extends BaseServlet {
     CustomerService service;
 
     @Override
-    protected String get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         CustomerSearchBean bean = new CustomerSearchBean();
         request.setAttribute("bean", bean);
-        return null;
-
     }
 
     @Override
-    protected String post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         MstCustomer mstCustomer = convertParameter(request);
         List<MstCustomer> searchResults = service.search(mstCustomer);
         CustomerSearchBean bean = new CustomerSearchBean();
         bean.setSearchCondition(mstCustomer);
         bean.setResults(searchResults);
         request.setAttribute("bean", bean);
-        return null;
     }
 
 }

@@ -7,16 +7,7 @@ package com.oisix.sample.base;
 
 import com.oisix.sample.bean.CustomerService;
 import com.oisix.sample.model.MstCustomer;
-import com.oisix.sample.validator.Address1Validator;
-import com.oisix.sample.validator.Address2Validator;
-import com.oisix.sample.validator.FullnameKanaValidator;
-import com.oisix.sample.validator.FullnameValidator;
-import com.oisix.sample.validator.MailAddressValidator;
-import com.oisix.sample.validator.TelValidator;
-import com.oisix.sample.validator.TodofukenValidator;
-import com.oisix.sample.validator.ZipCodeValidator;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -38,7 +29,7 @@ public class CustomerEditServlet extends BaseServlet {
     CustomerService service;
 
     @Override
-    protected String get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         MstCustomer mstCustomer = convertParameter(request);
         CustomerEditBean bean = new CustomerEditBean();
@@ -46,24 +37,31 @@ public class CustomerEditServlet extends BaseServlet {
             Optional<MstCustomer> find = service.find(mstCustomer.getCustomerId());
             if (find.isPresent()) {
                 bean.setMstCustomer(find.get());
+                bean.setChange(true);
             }
         }
         request.setAttribute("bean", bean);
-        return null;
     }
 
     @Override
-    protected String post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         MstCustomer mstCustomer = convertParameter(request);
-        List<String> errors = validate(mstCustomer);
-        if (!errors.isEmpty()) {
-            service.edit(mstCustomer);
-        }
         CustomerEditBean bean = new CustomerEditBean();
-        bean.setMstCustomer(mstCustomer);
+        if (StringUtils.isNotEmpty(request.getParameter("change"))) {
+            bean.setChange(true);
+        }
+        List<String> errors = validate(mstCustomer);
         bean.setErrors(errors);
+        if (errors.isEmpty()) {
+            try {
+                service.edit(mstCustomer);
+                bean.setActionMessage(bean.getViewTitle() + "完了しました。");
+            } catch (Exception e) {
+                bean.setActionMessage(bean.getViewTitle() + "に失敗しました。");
+            }
+        }
+        bean.setMstCustomer(mstCustomer);
         request.setAttribute("bean", bean);
-        return null;
     }
 }
