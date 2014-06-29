@@ -1,18 +1,27 @@
 package com.oisix.sample.base;
 
+import com.oisix.sample.bean.CustomerService;
 import com.oisix.sample.model.MstCustomer;
 import java.util.List;
+import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author megascus
  */
+@ViewScoped
+@Named(value = "customerEdit")
 public class CustomerEditBean {
 
     private String actionMessage;
     private MstCustomer mstCustomer = new MstCustomer();
     private List<String> errors;
     private boolean change = false;
+
+    @Inject
+    CustomerService service;
 
     public String getActionMessage() {
         return actionMessage;
@@ -48,5 +57,17 @@ public class CustomerEditBean {
 
     public void setChange(boolean change) {
         this.change = change;
+    }
+
+    public String update() {
+        try {
+            service.edit(mstCustomer);
+            this.setActionMessage(this.getViewTitle() + "完了しました。");
+        } catch (Exception e) {
+            this.setActionMessage(this.getViewTitle() + "に失敗しました。");
+        }
+        this.setMstCustomer(mstCustomer);
+
+        return null;
     }
 }

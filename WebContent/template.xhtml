@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title><ui:insert name="title">Default Title</ui:insert></title>
+        <style type="text/css">
+
+            body {
+                font-family: "trebuchet ms", sans-serif;
+                color: #555555;
+                /* font-size: 11pt; */
+                font-size: 12px;
+            }
+
+            table {
+                margin-bottom: 1.5em;
+                border: 1px solid #c0c0c0;
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+
+            table th {
+                text-align: left;
+                font-weight: bold;
+                /* padding: 0.5em; */
+                padding: 3px;
+                background-color: #eee;
+                border: 1px solid #ddd;
+            }
+
+            table td {
+                /* padding: 0.5em; */
+                padding: 3px;
+            }
+
+            #header {
+                height: 95px;
+                height: 60px;
+                background-image: url('../images/logo.png');
+                background-position: bottom left;
+                background-repeat: no-repeat;
+            }
+
+        </style>
+
+    </h:head>
+
+    <h:body>
+        <div id="header"></div>
+        <h1>
+            <ui:insert name="title">Default Title</ui:insert>
+        </h1>
+        <ui:insert name="body">Default Body</ui:insert>
+    </h:body>
+
+</html>

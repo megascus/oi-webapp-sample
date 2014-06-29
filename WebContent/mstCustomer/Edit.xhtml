@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            顧客<h:outputText value="#{customerEdit.customerEdit.viewTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <input type="hidden" jsfc="h:inputHidden" name="id" value="#{customerEdit.mstCustomer.id}" />
+                <fieldset style="width: 600px">
+                    <legend><h:outputText value="#{customerEdit.viewTitle}" />内容</legend>
+                    <table style="border: 0px">
+                        <tr>
+                            <td>顧客ID：</td>
+                            <td>
+                                <h:outputText value="#{customerEdit.mstCustomer.customerId}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>氏名：</td>
+                            <td><input type="text" jsfc="h:inputText" id="customerId" value="#{customerEdit.mstCustomer.fullname}" maxlength="256" size="20" /></td>
+                        </tr>
+                        <tr>
+                            <td>氏名(カナ)：</td>
+                            <td><input type="text" jsfc="h:inputText" name="fullnameKana" value="#{customerEdit.mstCustomer.fullname}" maxlength="256" size="20" /></td>
+                        </tr>
+                        <tr>
+                            <td>メールアドレス：</td>
+                            <td><input type="text" jsfc="h:inputText" name="mailAddress" value="#{customerEdit.mstCustomer.mailAddress}" maxlength="256" size="50" /></td>
+                        </tr>
+                        <tr>
+                            <td>郵便番号：</td>
+                            <td><input type="text" jsfc="h:inputText" name="zipCode1" value="#{customerEdit.mstCustomer.zipCode1}" maxlength="3" size="3" />-<input type="text" name="zipCode2" value="#{customerEdit.mstCustomer.zipCode2}" maxlength="4" size="4" /></td>
+                        </tr>
+                        <tr>
+                            <td>都道府県：</td>
+                            <td><input type="text" jsfc="h:inputText" name="todofuken" value="#{customerEdit.mstCustomer.todofuken}" maxlength="8" size="8" /></td>
+                        </tr>
+                        <tr>
+                            <td>住所１(市区郡町村)：</td>
+                            <td><input type="text" jsfc="h:inputText" name="address1" value="#{customerEdit.mstCustomer.address1}" maxlength="256" size="50" /></td>
+                        </tr>
+                        <tr>
+                            <td>住所２(番地号・建物名)：</td>
+                            <td><input type="text" jsfc="h:inputText" name="address2" value="#{customerEdit.mstCustomer.address2}" maxlength="256" size="50" /></td>
+                        </tr>
+                        <tr>
+                            <td>電話番号：</td>
+                            <td>
+                                <input type="text" jsfc="h:inputText" name="tel1" value="#{customerEdit.mstCustomer.tel1}" maxlength="4" size="4" />-
+                                <input type="text" jsfc="h:inputText" name="tel2" value="#{customerEdit.mstCustomer.tel2}" maxlength="4" size="4" />-
+                                <input type="text" jsfc="h:inputText" name="tel3" value="#{customerEdit.mstCustomer.tel3}" maxlength="4" size="4" />
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="submit" name="edit" jsf:action="#{customerEdit.update}" value="#{customerEdit.viewTitle}" />
+                </fieldset>
+                <br />
+                <a href="Search">戻る</a>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
